@@ -28,6 +28,8 @@ public class UserServiceTest {
         assertThat(savedUser.getId()).isNotNull();
         assertThat(savedUser.getName()).isNotNull();
         assertThat(savedUser.getJoinedAt()).isNotNull();
+
+        userRepository.delete(savedUser);
     }
 
     @Test
@@ -41,6 +43,8 @@ public class UserServiceTest {
 
         //that
         assertThat(found).isEqualTo(user);
+
+        userRepository.delete(found);
     }
     
     @Test
