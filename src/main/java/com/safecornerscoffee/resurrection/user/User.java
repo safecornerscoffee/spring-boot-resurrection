@@ -1,5 +1,9 @@
 package com.safecornerscoffee.resurrection.user;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
@@ -8,6 +12,9 @@ import java.util.Objects;
 public class User {
     private Long id;
     private String name;
+
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime joinedAt;
 
     protected User() {}
