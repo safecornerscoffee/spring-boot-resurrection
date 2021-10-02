@@ -23,7 +23,7 @@ public class UserServiceTest {
     @Test
     public void should_save_user() {
 
-        User savedUser = userService.save(new User("Emma Stone"));
+        User savedUser = userService.save(new User("Emma Stone#1"));
 
         assertThat(savedUser.getId()).isNotNull();
         assertThat(savedUser.getName()).isNotNull();
@@ -33,7 +33,7 @@ public class UserServiceTest {
     @Test
     public void should_fetch_exists_user() {
         //given
-        User user = new User(1L, "Emma Stone", LocalDateTime.now());
+        User user = new User(1L, "Emma Stone#2", LocalDateTime.now());
         userRepository.save(user);
 
         //when
@@ -55,7 +55,7 @@ public class UserServiceTest {
     @Test
     public void should_delete_exists_user() {
         //given
-        User user = new User(1L, "Emma Stone", LocalDateTime.now());
+        User user = new User(1L, "Emma Stone#3", LocalDateTime.now());
         userRepository.save(user);
 
         //when
