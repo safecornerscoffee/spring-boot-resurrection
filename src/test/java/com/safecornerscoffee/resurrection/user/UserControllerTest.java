@@ -49,7 +49,7 @@ public class UserControllerTest {
 
     @Test
     void create_user() throws Exception {
-        User newUser = new User("Emma Stone");
+        User newUser = new User("Emma Stone(Created)");
         MockHttpServletRequestBuilder request = post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(newUser));
@@ -72,7 +72,7 @@ public class UserControllerTest {
 
     @Test
     void retrieve_user() throws Exception {
-        User user = userService.save(new User("Emma Stone"));
+        User user = userService.save(new User("Emma Stone(One)"));
 
         String responseBody = mockMvc.perform(get("/users/" + user.getId())
                 .contentType(MediaType.APPLICATION_JSON))
@@ -97,7 +97,7 @@ public class UserControllerTest {
 
     @Test
     void delete_user() throws Exception {
-        User user = userService.save(new User("Emma Stone)"));
+        User user = userService.save(new User("Emma Stone(Deleted)"));
 
         MockHttpServletRequestBuilder request = delete("/users/" + user.getId())
                 .contentType(MediaType.APPLICATION_JSON);
