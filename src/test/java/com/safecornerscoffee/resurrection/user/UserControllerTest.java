@@ -32,11 +32,10 @@ public class UserControllerTest {
 
     @Test
     void retrieve_all_user() throws Exception {
-        userService.save(new User("Emma Stone(All)"));
+        userService.save(new User("Emma Stone"));
         userService.save(new User("Emily Blunt"));
 
         String responseBody = mockMvc.perform(get("/users").contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
@@ -51,7 +50,7 @@ public class UserControllerTest {
 
     @Test
     void create_user() throws Exception {
-        User newUser = new User("Emma Stone(Created)");
+        User newUser = new User("Emma Stone");
         MockHttpServletRequestBuilder request = post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(newUser));
@@ -74,7 +73,7 @@ public class UserControllerTest {
 
     @Test
     void retrieve_user() throws Exception {
-        User user = userService.save(new User("Emma Stone(One)"));
+        User user = userService.save(new User("Emma Stone"));
 
         String responseBody = mockMvc.perform(get("/users/" + user.getId())
                 .contentType(MediaType.APPLICATION_JSON))
@@ -99,7 +98,7 @@ public class UserControllerTest {
 
     @Test
     void delete_user() throws Exception {
-        User user = userService.save(new User("Emma Stone(Deleted)"));
+        User user = userService.save(new User("Emma Stone"));
 
         MockHttpServletRequestBuilder request = delete("/users/" + user.getId())
                 .contentType(MediaType.APPLICATION_JSON);
