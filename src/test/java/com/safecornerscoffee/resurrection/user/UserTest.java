@@ -10,14 +10,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class UserTest {
 
     @Test
-    void CreateUser() {
-
-    }
-
-    @Test
     void should_throw_error_with_empty_name() {
+        Long userId = 1L;
+        String name = "";
+        LocalDateTime joinDate = LocalDateTime.now();
+
         assertThatThrownBy(() -> {
-            new User(1L, "", LocalDateTime.now());
+            new User(userId, name, joinDate);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 }

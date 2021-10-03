@@ -26,11 +26,9 @@ public class UserService {
     }
 
     public User deleteById(Long id) {
-        User deletedUser = repository.findOne(id).map(user -> {
+        return repository.findOne(id).map(user -> {
             repository.delete(user);
             return user;
         }).orElseThrow(() -> new UserNotFoundException(id));
-
-        return deletedUser;
     }
 }
