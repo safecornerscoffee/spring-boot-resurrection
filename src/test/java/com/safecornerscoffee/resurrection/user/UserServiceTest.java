@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+class UserServiceTest {
 
     @InjectMocks
     UserService userService;
@@ -21,7 +21,7 @@ public class UserServiceTest {
     UserRepository userRepository;
 
     @Test
-    public void should_save_user() {
+    void should_save_user() {
 
         User savedUser = userService.save(new User("Emma Stone"));
 
@@ -33,7 +33,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void should_fetch_exists_user() {
+    void should_fetch_exists_user() {
         //given
         User user = new User(1L, "Emma Stone", LocalDateTime.now());
         userRepository.save(user);
@@ -48,7 +48,7 @@ public class UserServiceTest {
     }
     
     @Test
-    public void should_throw_exception_fetching_none_exists_user() {
+    void should_throw_exception_fetching_none_exists_user() {
         Long userId = 1L;
 
         assertThatThrownBy(() -> {
@@ -57,7 +57,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void should_delete_exists_user() {
+    void should_delete_exists_user() {
         //given
         User user = new User(1L, "Emma Stone", LocalDateTime.now());
         userRepository.save(user);
@@ -70,12 +70,11 @@ public class UserServiceTest {
     }
 
     @Test
-    public void throw_exception_deleting_none_exists_user() {
+    void throw_exception_deleting_none_exists_user() {
         Long userId = 1L;
 
         assertThatThrownBy(() -> {
             userService.deleteById(userId);
         }).isInstanceOf(UserNotFoundException.class);
     }
-
 }
