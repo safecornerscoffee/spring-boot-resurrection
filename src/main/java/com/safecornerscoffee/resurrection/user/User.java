@@ -6,13 +6,18 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.springframework.util.Assert;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Past;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class User {
     private Long id;
+
+    @Min(4)
     private String name;
 
+    @Past
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime joinedAt;
