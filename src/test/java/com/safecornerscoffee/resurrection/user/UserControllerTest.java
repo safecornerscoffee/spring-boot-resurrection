@@ -2,6 +2,7 @@ package com.safecornerscoffee.resurrection.user;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.safecornerscoffee.resurrection.user.data.UserDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -52,7 +53,7 @@ class UserControllerTest {
 
     @Test
     void create_user() throws Exception {
-        User newUser = new User("common-sense", "resurrection");
+        UserDto newUser = new UserDto("common-sense", "resurrection");
         MockHttpServletRequestBuilder request = post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(newUser));
