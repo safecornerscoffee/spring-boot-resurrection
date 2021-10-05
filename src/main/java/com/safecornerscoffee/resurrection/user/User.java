@@ -32,7 +32,7 @@ public class User {
         inverseJoinColumns = @JoinColumn(name="authority_name"))
     private Set<Authority> authorities = new HashSet<>();
 
-    private static Authority ROLE_USER = new Authority("ROLE_USER");
+    private static final Authority ROLE_USER = new Authority("ROLE_USER");
 
     @Past
     @JsonSerialize(using = LocalDateTimeSerializer.class)
