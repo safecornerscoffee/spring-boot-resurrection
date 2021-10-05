@@ -10,15 +10,14 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class UserService {
 
-    private static final Authority ROLE_USER = new Authority("ROLE_USER");
-    private static final Authority ROLE_ADMIN = new Authority("ROLE_ADMIN");
-
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthorityFactory authorityFactory;
 
-    public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository repository, PasswordEncoder passwordEncoder, AuthorityFactory authorityFactory) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
+        this.authorityFactory = authorityFactory;
     }
 
     public List<User> findAll() {
@@ -32,7 +31,7 @@ public class UserService {
     @Transactional
     public User save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.getAuthorities().add(ROLE_USER);
+        user.getAuthorities().add(authorityFactory.getUserRole());
         return repository.save(user);
     }
 

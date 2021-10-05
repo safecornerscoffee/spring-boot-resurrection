@@ -29,7 +29,7 @@ public class User {
     @JsonIgnore
     private boolean activated;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany
     @JoinTable(name="user_authority",
         joinColumns = @JoinColumn(name="user_id"),
         inverseJoinColumns = @JoinColumn(name="authority_name"))

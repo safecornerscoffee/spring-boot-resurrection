@@ -2,6 +2,7 @@ package com.safecornerscoffee.resurrection.user;
 
 import com.safecornerscoffee.resurrection.data.UserDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -18,11 +19,19 @@ public class UserController {
     }
 
     @GetMapping("/users")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public List<User> all() {
         return service.findAll();
     }
 
-    @PostMapping("/users")
+    @GetMapping("/users/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public User one(@PathVariable Long id) {
+        return service.findById(id);
+    }
+
+
+    @PostMapping(value = {"/users", "/api/signup"})
     public ResponseEntity<User> create(@RequestBody UserDto dto) {
         User user = dto.toUser();
         User savedUser = service.save(user);
@@ -33,11 +42,6 @@ public class UserController {
                 .toUri();
 
         return ResponseEntity.created(uri).body(savedUser);
-    }
-
-    @GetMapping("/users/{id}")
-    public User one(@PathVariable Long id) {
-        return service.findById(id);
     }
 
     @DeleteMapping("/users/{id}")
