@@ -46,9 +46,6 @@ class UserControllerTest {
         });
 
         assertThat(users).hasSize(2);
-        users.forEach(user -> {
-            userService.deleteById(user.getId());
-        });
     }
 
     @Test
