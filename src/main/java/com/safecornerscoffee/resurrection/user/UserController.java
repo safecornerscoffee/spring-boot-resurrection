@@ -1,5 +1,6 @@
 package com.safecornerscoffee.resurrection.user;
 
+import com.safecornerscoffee.resurrection.user.data.UserDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -22,7 +23,8 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<User> create(@RequestBody User user) {
+    public ResponseEntity<User> create(@RequestBody UserDto dto) {
+        User user = dto.toUser();
         User savedUser = service.save(user);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
