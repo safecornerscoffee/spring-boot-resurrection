@@ -30,6 +30,6 @@
 </dependency>
 ```
 
-
-
-
+```shell
+echo 'super-secret' | base64
+```
