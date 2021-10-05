@@ -31,5 +31,5 @@
 ```
 
 ```shell
-echo 'super-secret' | base64
+echo 'jwt-super-secret-key-jwt-super-secret-key-jwt-super-secret-key-jwt-super-secret-key-jwt-super-secret-key-jwt-super-secret-key-jwt-super-secret-key' | base64
 ```
