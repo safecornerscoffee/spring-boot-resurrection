@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,8 +18,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Transactional
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc()
 class UserControllerTest {
 
     @Autowired
@@ -32,8 +34,8 @@ class UserControllerTest {
 
     @Test
     void retrieve_all_user() throws Exception {
-        userService.save(new User("Emma Stone"));
-        userService.save(new User("Emily Blunt"));
+        userService.save(new User("common-sense", "resurrection"));
+        userService.save(new User("kanye-west", "all-falls-down"));
 
         String responseBody = mockMvc.perform(get("/users").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -50,7 +52,7 @@ class UserControllerTest {
 
     @Test
     void create_user() throws Exception {
-        User newUser = new User("Emma Stone");
+        User newUser = new User("common-sense", "resurrection");
         MockHttpServletRequestBuilder request = post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(newUser));
@@ -65,15 +67,14 @@ class UserControllerTest {
         User createdUser = objectMapper.readValue(responseBody, User.class);
 
         assertThat(createdUser.getId()).isNotNull();
-        assertThat(createdUser.getName()).isEqualTo(newUser.getName());
+        assertThat(createdUser.getUsername()).isEqualTo(newUser.getUsername());
         assertThat(createdUser.getJoinedAt()).isNotNull();
 
-        userService.deleteById(createdUser.getId());
     }
 
     @Test
     void retrieve_user() throws Exception {
-        User user = userService.save(new User("Emma Stone"));
+        User user = userService.save(new User("common-sense", "resurrection"));
 
         String responseBody = mockMvc.perform(get("/users/" + user.getId())
                 .contentType(MediaType.APPLICATION_JSON))
@@ -84,10 +85,9 @@ class UserControllerTest {
         User fetchUser = objectMapper.readValue(responseBody, User.class);
 
         assertThat(fetchUser.getId()).isNotNull();
-        assertThat(fetchUser.getName()).isEqualTo(user.getName());
+        assertThat(fetchUser.getUsername()).isEqualTo(user.getUsername());
         assertThat(fetchUser.getJoinedAt()).isNotNull();
 
-        userService.deleteById(fetchUser.getId());
     }
 
     @Test
@@ -98,7 +98,7 @@ class UserControllerTest {
 
     @Test
     void delete_user() throws Exception {
-        User user = userService.save(new User("Emma Stone"));
+        User user = userService.save(new User("common-sense", "resurrection"));
 
         MockHttpServletRequestBuilder request = delete("/users/" + user.getId())
                 .contentType(MediaType.APPLICATION_JSON);

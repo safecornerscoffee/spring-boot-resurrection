@@ -1,21 +1,38 @@
 package com.safecornerscoffee.resurrection.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.springframework.util.Assert;
 
-import javax.validation.constraints.Min;
+import javax.persistence.*;
 import javax.validation.constraints.Past;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+@Entity
 public class User {
+
+    @Id
+    @GeneratedValue
     private Long id;
 
-    @Min(4)
-    private String name;
+    private String username;
+
+    @JsonIgnore
+    private String password;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name="user_authority",
+        joinColumns = @JoinColumn(name="user_id"),
+        inverseJoinColumns = @JoinColumn(name="authority_name"))
+    private Set<Authority> authorities = new HashSet<>();
+
+    private static Authority ROLE_USER = new Authority("ROLE_USER");
 
     @Past
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -24,31 +41,33 @@ public class User {
 
     protected User() {}
 
-    public User(String name) {
-        Assert.notNull(name, "name should be not null");
-        Assert.hasText(name, "name should be not empty");
+    public User(String username, String password) {
+        Assert.notNull(username, "username should be not null");
+        Assert.hasText(username, "username should be not empty");
 
-        this.name = name;
-    }
+        Assert.notNull(password, "password should be not null");
+        Assert.hasText(password, "password should be not empty");
 
-    public User(Long id, String name, LocalDateTime joinedAt) {
-
-        Assert.notNull(id, "id should not be null");
-        Assert.notNull(name, "name should be not null");
-        Assert.hasText(name, "name should be not empty");
-        Assert.notNull(joinedAt, "joinedAt should not be null");
-
-        this.id = id;
-        this.name = name;
-        this.joinedAt = joinedAt;
+        this.username = username;
+        this.password = password;
+        this.authorities.add(ROLE_USER);
+        this.joinedAt = LocalDateTime.now();
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public Set<Authority> getAuthorities() {
+        return authorities;
     }
 
     public LocalDateTime getJoinedAt() {
@@ -59,8 +78,16 @@ public class User {
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String name) {
+        this.username = name;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
     }
 
     public void setJoinedAt(LocalDateTime joinedAt) {
@@ -75,20 +102,22 @@ public class User {
         User user = (User) o;
 
         return Objects.equals(this.getId(), user.getId()) &&
-                Objects.equals(this.getName(), user.getName()) &&
+                Objects.equals(this.getUsername(), user.getUsername()) &&
+                Objects.equals(this.getPassword(), user.getPassword()) &&
+                Objects.equals(this.getAuthorities(), user.getAuthorities()) &&
                 Objects.equals(this.getJoinedAt(), user.getJoinedAt());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this, id, this.name, this.joinedAt);
+        return Objects.hash(this, id, this.username, this.password, this.joinedAt);
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", username='" + username + '\'' +
                 ", joinedAt=" + joinedAt +
                 '}';
     }

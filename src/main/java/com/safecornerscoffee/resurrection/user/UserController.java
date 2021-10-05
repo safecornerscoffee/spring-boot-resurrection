@@ -35,7 +35,7 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     public User one(@PathVariable Long id) {
-        return service.findOne(id);
+        return service.findById(id);
     }
 
     @DeleteMapping("/users/{id}")

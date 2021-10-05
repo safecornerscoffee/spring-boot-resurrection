@@ -2,21 +2,14 @@ package com.safecornerscoffee.resurrection.user;
 
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
+import static org.assertj.core.api.Assertions.assertThat;
 
 class UserTest {
 
     @Test
-    void should_throw_error_with_empty_name() {
-        Long userId = 1L;
-        String name = "";
-        LocalDateTime joinDate = LocalDateTime.now();
+    void createUser() {
+        User user = new User("username", "password");
 
-        assertThatThrownBy(() -> {
-            new User(userId, name, joinDate);
-        }).isInstanceOf(IllegalArgumentException.class);
+        assertThat(user).hasNoNullFieldsOrPropertiesExcept("id");
     }
 }
