@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,7 @@ class UserControllerTest {
     UserService userService;
 
     @Test
+    @WithMockUser
     void retrieve_all_user() throws Exception {
         userService.save(new User("common-sense", "resurrection"));
         userService.save(new User("kanye-west", "all-falls-down"));
@@ -49,6 +51,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser
     void create_user() throws Exception {
         UserDto newUser = new UserDto("common-sense", "resurrection");
         MockHttpServletRequestBuilder request = post("/users")
@@ -71,6 +74,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser
     void retrieve_user() throws Exception {
         User user = userService.save(new User("common-sense", "resurrection"));
 
@@ -89,12 +93,14 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser
     void get_404_response_when_user_not_found() throws Exception {
         mockMvc.perform(get("/users/" + "999").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 
     @Test
+    @WithMockUser
     void delete_user() throws Exception {
         User user = userService.save(new User("common-sense", "resurrection"));
 
@@ -108,6 +114,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser
     void delete_none_exists_user_should_throw_404_not_found() throws Exception {
 
         MockHttpServletRequestBuilder request = delete("/users/" + "999")
