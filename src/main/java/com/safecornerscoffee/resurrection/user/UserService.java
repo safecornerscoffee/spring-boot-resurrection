@@ -10,6 +10,9 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class UserService {
 
+    private static final Authority ROLE_USER = new Authority("ROLE_USER");
+    private static final Authority ROLE_ADMIN = new Authority("ROLE_ADMIN");
+
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
 
@@ -29,6 +32,7 @@ public class UserService {
     @Transactional
     public User save(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.getAuthorities().add(ROLE_USER);
         return repository.save(user);
     }
 

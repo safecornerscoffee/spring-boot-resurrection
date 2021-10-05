@@ -26,13 +26,14 @@ public class User {
     @JsonIgnore
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonIgnore
+    private boolean activated;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name="user_authority",
         joinColumns = @JoinColumn(name="user_id"),
         inverseJoinColumns = @JoinColumn(name="authority_name"))
     private Set<Authority> authorities = new HashSet<>();
-
-    private static final Authority ROLE_USER = new Authority("ROLE_USER");
 
     @Past
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -50,8 +51,8 @@ public class User {
 
         this.username = username;
         this.password = password;
-        this.authorities.add(ROLE_USER);
         this.joinedAt = LocalDateTime.now();
+        this.activated = true;
     }
 
     public Long getId() {
@@ -120,5 +121,9 @@ public class User {
                 ", username='" + username + '\'' +
                 ", joinedAt=" + joinedAt +
                 '}';
+    }
+
+    public boolean isActivated() {
+        return activated;
     }
 }
